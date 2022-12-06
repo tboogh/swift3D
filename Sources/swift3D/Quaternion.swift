@@ -28,7 +28,7 @@ public struct quat: ArrayLiteralConvertible, CustomDebugStringConvertible {
         z = v.z
         self.w = w
     }
-    
+
     public init(angle: Float, axis: float3) {
         self = angleAxis(angle, axis: axis)
     }
@@ -95,26 +95,23 @@ public struct quat: ArrayLiteralConvertible, CustomDebugStringConvertible {
     }
 
     public var debugDescription: String {
-        get {
-            return ""
-        }
+        return ""
     }
 }
 
-prefix public func +(q: quat) -> quat {
+public prefix func + (q: quat) -> quat {
     return q
 }
 
-prefix public func -(q: quat) -> quat {
+public prefix func - (q: quat) -> quat {
     return quat(-q.w, -q.x, -q.y, -q.z)
 }
 
-public func +(q: quat, p: quat) -> quat {
+public func + (q: quat, p: quat) -> quat {
     return quat(q.w + p.w, q.x + p.x, q.y + p.y, q.z + p.z)
 }
 
-public func *(p: quat, q: quat) -> quat {
-    
+public func * (p: quat, q: quat) -> quat {
     let w = p.w * q.w - p.x * q.x - p.y * q.y - p.z * q.z
     let x = p.w * q.x + p.x * q.w + p.y * q.z - p.z * q.y
     let y = p.w * q.y + p.y * q.w + p.z * q.x - p.x * q.z
@@ -122,7 +119,7 @@ public func *(p: quat, q: quat) -> quat {
     return quat(w, x, y, z)
 }
 
-public func *(q: quat, v: float3) -> float3 {
+public func * (q: quat, v: float3) -> float3 {
     let QuatVector = float3(q.x, q.y, q.z)
     let uv = cross(QuatVector, v)
     let uuv = cross(QuatVector, uv)
@@ -130,34 +127,34 @@ public func *(q: quat, v: float3) -> float3 {
     return v + ((uv * q.w) + uuv) * Float(2)
 }
 
-public func *(v: float3, q: quat) -> float3 {
+public func * (v: float3, q: quat) -> float3 {
     return inverse(q) * v
 }
 
-public func *(q: quat, v: float4) -> float4 {
+public func * (q: quat, v: float4) -> float4 {
     return float4(q * float3(v), v.w)
 }
 
-public func *(v: float4, q: quat) -> float4 {
+public func * (v: float4, q: quat) -> float4 {
     return inverse(q) * v
 }
 
-public func *(q: quat, p: Float) -> quat {
-    return quat( q.w * p, q.x * p, q.y * p, q.z * p)
+public func * (q: quat, p: Float) -> quat {
+    return quat(q.w * p, q.x * p, q.y * p, q.z * p)
 }
 
-public func *(p: Float, q: quat) -> quat {
+public func * (p: Float, q: quat) -> quat {
     return q * p
 }
 
-public func /(q: quat, p: Float) -> quat {
-    return quat( q.w / p, q.x / p, q.y / p, q.z / p)
+public func / (q: quat, p: Float) -> quat {
+    return quat(q.w / p, q.x / p, q.y / p, q.z / p)
 }
 
 /// Returns the normalized quaternion.
 public func normalize(q: quat) -> quat {
     let len = length(q)
-    if (len <= Float(0)) {
+    if len <= Float(0) {
         // Problem
         return quat(1, 0, 0, 0)
     }
@@ -189,17 +186,17 @@ public func dot(q1: quat, _ q2: quat) -> Float {
 /// The interpolation is oriented and the rotation is performed at constant speed.
 /// For short path spherical linear interpolation, use the slerp function.
 public func mix(x: quat, _ y: quat, _ a: Float) -> quat {
-    let cosTheta = dot(x, y);
+    let cosTheta = dot(x, y)
 
     // Perform a linear interpolation when cosTheta is close to 1 to avoid side effect of sin(angle) becoming a zero denominator
-    if (cosTheta > Float(1) - Float(0.0000001)) {
-
+    if cosTheta > Float(1) - Float(0.0000001) {
         // Linear interpolation
         return quat(
-        mix(x.w, y.w, a),
-                mix(x.x, y.x, a),
-                mix(x.y, y.y, a),
-                mix(x.z, y.z, a))
+            mix(x.w, y.w, a),
+            mix(x.x, y.x, a),
+            mix(x.y, y.y, a),
+            mix(x.z, y.z, a)
+        )
     } else {
         // Essential Mathematics, page 467
         let angle = acos(cosTheta)
@@ -222,19 +219,20 @@ public func slerp(x: quat, _ y: quat, _ a: Float) -> quat {
 
     // If cosTheta < 0, the interpolation will take the long way around the sphere.
     // To fix this, one quat must be negated.
-    if (cosTheta < Float(0)) {
+    if cosTheta < Float(0) {
         z = -y
         cosTheta = -cosTheta
     }
 
     // Perform a linear interpolation when cosTheta is close to 1 to avoid side effect of sin(angle) becoming a zero denominator
-    if (cosTheta > Float(1) - Float(0.0000001)) {
+    if cosTheta > Float(1) - Float(0.0000001) {
         // Linear interpolation
         return quat(
-        mix(x.w, z.w, a),
-                mix(x.x, z.x, a),
-                mix(x.y, z.y, a),
-                mix(x.z, z.z, a))
+            mix(x.w, z.w, a),
+            mix(x.x, z.x, a),
+            mix(x.y, z.y, a),
+            mix(x.z, z.z, a)
+        )
     } else {
         // Essential Mathematics, page 467
         let angle = acos(cosTheta)
@@ -248,7 +246,7 @@ public func rotate(q: quat, angle: Float, axis: float3) -> quat {
 
     // Axis of rotation must be normalised
     let len = length(tmp)
-    if (abs(len - Float(1)) > Float(0.001)) {
+    if abs(len - Float(1)) > Float(0.001) {
         let oneOverLen = Float(1) / len
         tmp *= oneOverLen
     }
@@ -339,35 +337,30 @@ public func quat_cast(m: float3x3) -> quat {
     let mult = Float(0.25) / biggestVal
 
     var Result = quat()
-    switch (biggestIndex) {
+    switch biggestIndex {
     case 0:
         Result.w = biggestVal
         Result.x = (m[1][2] - m[2][1]) * mult
         Result.y = (m[2][0] - m[0][2]) * mult
         Result.z = (m[0][1] - m[1][0]) * mult
-        break
     case 1:
         Result.w = (m[1][2] - m[2][1]) * mult
         Result.x = biggestVal
         Result.y = (m[0][1] + m[1][0]) * mult
         Result.z = (m[2][0] + m[0][2]) * mult
-        break
     case 2:
         Result.w = (m[2][0] - m[0][2]) * mult
         Result.x = (m[0][1] + m[1][0]) * mult
         Result.y = biggestVal
         Result.z = (m[1][2] + m[2][1]) * mult
-        break
     case 3:
         Result.w = (m[0][1] - m[1][0]) * mult
         Result.x = (m[2][0] + m[0][2]) * mult
         Result.y = (m[1][2] + m[2][1]) * mult
         Result.z = biggestVal
-        break
 
     default:
-        assert(false)
-        break
+        assertionFailure()
     }
     return Result
 }
@@ -385,7 +378,7 @@ public func angle(q: quat) -> Float {
 /// Returns the q rotation axis.
 public func axis(q: quat) -> float3 {
     let tmp1 = Float(1) - q.w * q.w
-    if (tmp1 <= Float(0)) {
+    if tmp1 <= Float(0) {
         return float3(0, 0, 1)
     }
     let tmp2 = Float(1) / sqrt(tmp1)
@@ -418,14 +411,14 @@ public struct dquat: ArrayLiteralConvertible, CustomDebugStringConvertible {
         z = 0
         w = 1
     }
-    
+
     public init(w: Double, v: double3) {
         x = v.x
         y = v.y
         z = v.z
         self.w = w
     }
-    
+
     public init(angle: Double, axis: double3) {
         self = angleAxis(angle, axis: axis)
     }
@@ -464,7 +457,6 @@ public struct dquat: ArrayLiteralConvertible, CustomDebugStringConvertible {
         z = elements[3]
     }
 
-
     /// Create a quaternion from two normalized axis
     /// @see http://lolengine.net/blog/2013/09/18/beautiful-maths-quaternion-from-vectors
     public init(_ u: double3, _ v: double3) {
@@ -493,26 +485,23 @@ public struct dquat: ArrayLiteralConvertible, CustomDebugStringConvertible {
     }
 
     public var debugDescription: String {
-        get {
-            return ""
-        }
+        return ""
     }
 }
 
-prefix public func +(q: dquat) -> dquat {
+public prefix func + (q: dquat) -> dquat {
     return q
 }
 
-prefix public func -(q: dquat) -> dquat {
-    return dquat( -q.w, -q.x, -q.y, -q.z)
+public prefix func - (q: dquat) -> dquat {
+    return dquat(-q.w, -q.x, -q.y, -q.z)
 }
 
-public func +(q: dquat, p: dquat) -> dquat {
+public func + (q: dquat, p: dquat) -> dquat {
     return dquat(q.w + p.w, q.x + p.x, q.y + p.y, q.z + p.z)
 }
 
-public func *(p: dquat, q: dquat) -> dquat {
-    
+public func * (p: dquat, q: dquat) -> dquat {
     let w = p.w * q.w - p.x * q.x - p.y * q.y - p.z * q.z
     let x = p.w * q.x + p.x * q.w + p.y * q.z - p.z * q.y
     let y = p.w * q.y + p.y * q.w + p.z * q.x - p.x * q.z
@@ -520,7 +509,7 @@ public func *(p: dquat, q: dquat) -> dquat {
     return dquat(w, x, y, z)
 }
 
-public func *(q: dquat, v: double3) -> double3 {
+public func * (q: dquat, v: double3) -> double3 {
     let QuatVector = double3(q.x, q.y, q.z)
     let uv = cross(QuatVector, v)
     let uuv = cross(QuatVector, uv)
@@ -528,34 +517,34 @@ public func *(q: dquat, v: double3) -> double3 {
     return v + ((uv * q.w) + uuv) * Double(2)
 }
 
-public func *(v: double3, q: dquat) -> double3 {
+public func * (v: double3, q: dquat) -> double3 {
     return inverse(q) * v
 }
 
-public func *(q: dquat, v: double4) -> double4 {
+public func * (q: dquat, v: double4) -> double4 {
     return double4(q * double3(v), v.w)
 }
 
-public func *(v: double4, q: dquat) -> double4 {
+public func * (v: double4, q: dquat) -> double4 {
     return inverse(q) * v
 }
 
-public func *(q: dquat, p: Double) -> dquat {
+public func * (q: dquat, p: Double) -> dquat {
     return dquat(q.w * p, q.x * p, q.y * p, q.z * p)
 }
 
-public func *(p: Double, q: dquat) -> dquat {
+public func * (p: Double, q: dquat) -> dquat {
     return q * p
 }
 
-public func /(q: dquat, p: Double) -> dquat {
+public func / (q: dquat, p: Double) -> dquat {
     return dquat(q.w / p, q.x / p, q.y / p, q.z / p)
 }
 
 /// Returns the normalized quaternion.
 public func normalize(q: dquat) -> dquat {
     let len = length(q)
-    if (len <= Double(0)) {
+    if len <= Double(0) {
         // Problem
         return dquat(1, 0, 0, 0)
     }
@@ -588,17 +577,17 @@ public func dot(q1: dquat, _ q2: dquat) -> Double {
 /// The interpolation is oriented and the rotation is performed at constant speed.
 /// For short path spherical linear interpolation, use the slerp function.
 public func mix(x: dquat, _ y: dquat, _ a: Double) -> dquat {
-    let cosTheta = dot(x, y);
+    let cosTheta = dot(x, y)
 
     // Perform a linear interpolation when cosTheta is close to 1 to avoid side effect of sin(angle) becoming a zero denominator
-    if (cosTheta > Double(1) - Double(0.0000001)) {
-
+    if cosTheta > Double(1) - Double(0.0000001) {
         // Linear interpolation
         return dquat(
-        mix(x.w, y.w, a),
-                mix(x.x, y.x, a),
-                mix(x.y, y.y, a),
-                mix(x.z, y.z, a))
+            mix(x.w, y.w, a),
+            mix(x.x, y.x, a),
+            mix(x.y, y.y, a),
+            mix(x.z, y.z, a)
+        )
     } else {
         // Essential Mathematics, page 467
         let angle = acos(cosTheta)
@@ -621,19 +610,20 @@ public func slerp(x: dquat, _ y: dquat, _ a: Double) -> dquat {
 
     // If cosTheta < 0, the interpolation will take the long way around the sphere.
     // To fix this, one quat must be negated.
-    if (cosTheta < Double(0)) {
+    if cosTheta < Double(0) {
         z = -y
         cosTheta = -cosTheta
     }
 
     // Perform a linear interpolation when cosTheta is close to 1 to avoid side effect of sin(angle) becoming a zero denominator
-    if (cosTheta > Double(1) - Double(0.0000001)) {
+    if cosTheta > Double(1) - Double(0.0000001) {
         // Linear interpolation
         return dquat(
-        mix(x.w, z.w, a),
-                mix(x.x, z.x, a),
-                mix(x.y, z.y, a),
-                mix(x.z, z.z, a))
+            mix(x.w, z.w, a),
+            mix(x.x, z.x, a),
+            mix(x.y, z.y, a),
+            mix(x.z, z.z, a)
+        )
     } else {
         // Essential Mathematics, page 467
         let angle = acos(cosTheta)
@@ -647,7 +637,7 @@ public func rotate(q: dquat, angle: Double, axis: double3) -> dquat {
 
     // Axis of rotation must be normalised
     let len = length(tmp)
-    if (abs(len - Double(1)) > Double(0.001)) {
+    if abs(len - Double(1)) > Double(0.001) {
         let oneOverLen = Double(1) / len
         tmp *= oneOverLen
     }
@@ -738,35 +728,30 @@ public func dquat_cast(m: double3x3) -> dquat {
     let mult = Double(0.25) / biggestVal
 
     var Result = dquat()
-    switch (biggestIndex) {
+    switch biggestIndex {
     case 0:
         Result.w = biggestVal
         Result.x = (m[1][2] - m[2][1]) * mult
         Result.y = (m[2][0] - m[0][2]) * mult
         Result.z = (m[0][1] - m[1][0]) * mult
-        break
     case 1:
         Result.w = (m[1][2] - m[2][1]) * mult
         Result.x = biggestVal
         Result.y = (m[0][1] + m[1][0]) * mult
         Result.z = (m[2][0] + m[0][2]) * mult
-        break
     case 2:
         Result.w = (m[2][0] - m[0][2]) * mult
         Result.x = (m[0][1] + m[1][0]) * mult
         Result.y = biggestVal
         Result.z = (m[1][2] + m[2][1]) * mult
-        break
     case 3:
         Result.w = (m[0][1] - m[1][0]) * mult
         Result.x = (m[2][0] + m[0][2]) * mult
         Result.y = (m[1][2] + m[2][1]) * mult
         Result.z = biggestVal
-        break
 
     default:
-        assert(false)
-        break
+        assertionFailure()
     }
     return Result
 }
@@ -784,7 +769,7 @@ public func angle(q: dquat) -> Double {
 /// Returns the q rotation axis.
 public func axis(q: dquat) -> double3 {
     let tmp1 = Double(1) - q.w * q.w
-    if (tmp1 <= Double(0)) {
+    if tmp1 <= Double(0) {
         return double3(0, 0, 1)
     }
     let tmp2 = Double(1) / sqrt(tmp1)
