@@ -9,7 +9,7 @@
 import Foundation
 import simd
 
-public struct quat: ArrayLiteralConvertible, CustomDebugStringConvertible {
+public struct quat: ExpressibleByArrayLiteral, CustomDebugStringConvertible {
     public var x: Float
     public var y: Float
     public var z: Float
@@ -30,7 +30,7 @@ public struct quat: ArrayLiteralConvertible, CustomDebugStringConvertible {
     }
 
     public init(angle: Float, axis: float3) {
-        self = angleAxis(angle, axis: axis)
+        self = angleAxis(angle: angle, axis: axis)
     }
 
     public init(_ w: Float, _ x: Float, _ y: Float, _ z: Float) {
@@ -152,7 +152,7 @@ public func / (q: quat, p: Float) -> quat {
 }
 
 /// Returns the normalized quaternion.
-public func normalize(q: quat) -> quat {
+public func normalize(_ q: quat) -> quat {
     let len = length(q)
     if len <= Float(0) {
         // Problem
@@ -163,21 +163,21 @@ public func normalize(q: quat) -> quat {
 }
 
 /// Returns the length of the quaternion.
-public func length(q: quat) -> Float {
+public func length(_ q: quat) -> Float {
     return sqrt(dot(q, q))
 }
 
 /// Returns the q conjugate.
-public func conjugate(q: quat) -> quat {
+public func conjugate(_ q: quat) -> quat {
     return quat(q.w, -q.x, -q.y, -q.z)
 }
 
 /// Returns the q inverse.
-public func inverse(q: quat) -> quat {
+public func inverse(_ q: quat) -> quat {
     return conjugate(q) / dot(q, q)
 }
 
-public func dot(q1: quat, _ q2: quat) -> Float {
+public func dot(_ q1: quat, _ q2: quat) -> Float {
     let tmp = float4(q1.x * q2.x, q1.y * q2.y, q1.z * q2.z, q1.w * q2.w)
     return (tmp.x + tmp.y) + (tmp.z + tmp.w)
 }
@@ -185,7 +185,7 @@ public func dot(q1: quat, _ q2: quat) -> Float {
 /// Spherical linear interpolation of two quaternions.
 /// The interpolation is oriented and the rotation is performed at constant speed.
 /// For short path spherical linear interpolation, use the slerp function.
-public func mix(x: quat, _ y: quat, _ a: Float) -> quat {
+public func mix(_ x: quat, _ y: quat, _ a: Float) -> quat {
     let cosTheta = dot(x, y)
 
     // Perform a linear interpolation when cosTheta is close to 1 to avoid side effect of sin(angle) becoming a zero denominator
@@ -264,22 +264,22 @@ public func eulerAngles(x: quat) -> float3 {
 }
 
 /// Returns roll value of euler angles expressed in radians.
-public func roll(q: quat) -> Float {
+public func roll(_ q: quat) -> Float {
     return Float(atan2(Float(2) * (q.x * q.y + q.w * q.z), q.w * q.w + q.x * q.x - q.y * q.y - q.z * q.z))
 }
 
 /// Returns pitch value of euler angles expressed in radians.
-public func pitch(q: quat) -> Float {
+public func pitch(_ q: quat) -> Float {
     return Float(atan2(Float(2) * (q.y * q.z + q.w * q.x), q.w * q.w - q.x * q.x - q.y * q.y + q.z * q.z))
 }
 
 /// Returns yaw value of euler angles expressed in radians.
-public func yaw(q: quat) -> Float {
+public func yaw(_ q: quat) -> Float {
     return asin(Float(-2) * (q.x * q.z - q.w * q.y))
 }
 
 /// Converts a quaternion to a 3 * 3 matrix.
-public func float3x3_cast(q: quat) -> float3x3 {
+public func float3x3_cast(_ q: quat) -> float3x3 {
     var Result = float3x3(1)
     let qxx = q.x * q.x
     let qyy = q.y * q.y
@@ -311,7 +311,7 @@ public func float4x4_cast(q: quat) -> float4x4 {
 }
 
 /// Converts a 3 * 3 matrix to a quaternion.
-public func quat_cast(m: float3x3) -> quat {
+public func quat_cast(_ m: float3x3) -> quat {
     let fourXSquaredMinus1 = m[0][0] - m[1][1] - m[2][2]
     let fourYSquaredMinus1 = m[1][1] - m[0][0] - m[2][2]
     let fourZSquaredMinus1 = m[2][2] - m[0][0] - m[1][1]
@@ -366,7 +366,7 @@ public func quat_cast(m: float3x3) -> quat {
 }
 
 /// Converts a 4 * 4 matrix to a quaternion.
-public func quat_cast(m: float4x4) -> quat {
+public func quat_cast(_ m: float4x4) -> quat {
     return quat_cast(float3x3(m))
 }
 
@@ -399,7 +399,7 @@ public func angleAxis(angle: Float, axis: float3) -> quat {
     return Result
 }
 
-public struct dquat: ArrayLiteralConvertible, CustomDebugStringConvertible {
+public struct dquat: ExpressibleByArrayLiteral, CustomDebugStringConvertible {
     public var x: Double
     public var y: Double
     public var z: Double
@@ -420,7 +420,7 @@ public struct dquat: ArrayLiteralConvertible, CustomDebugStringConvertible {
     }
 
     public init(angle: Double, axis: double3) {
-        self = angleAxis(angle, axis: axis)
+        self = angleAxis(angle: angle, axis: axis)
     }
 
     public init(_ w: Double, _ x: Double, _ y: Double, _ z: Double) {
@@ -542,7 +542,7 @@ public func / (q: dquat, p: Double) -> dquat {
 }
 
 /// Returns the normalized quaternion.
-public func normalize(q: dquat) -> dquat {
+public func normalize(_ q: dquat) -> dquat {
     let len = length(q)
     if len <= Double(0) {
         // Problem
@@ -553,22 +553,22 @@ public func normalize(q: dquat) -> dquat {
 }
 
 /// Returns the length of the quaternion.
-public func length(q: dquat) -> Double {
+public func length(_ q: dquat) -> Double {
     return sqrt(dot(q, q))
 }
 
 /// Returns the q conjugate.
-public func conjugate(q: dquat) -> dquat {
+public func conjugate(_ q: dquat) -> dquat {
     return dquat(q.w, -q.x, -q.y, -q.z)
 }
 
 /// Returns the q inverse.
-public func inverse(q: dquat) -> dquat {
+public func inverse(_ q: dquat) -> dquat {
     return conjugate(q) / dot(q, q)
 }
 
 /// Returns dot product of q1 and q2, i.e., q1[0] * q2[0] + q1[1] * q2[1] + ...
-public func dot(q1: dquat, _ q2: dquat) -> Double {
+public func dot(_ q1: dquat, _ q2: dquat) -> Double {
     let tmp = double4(q1.x * q2.x, q1.y * q2.y, q1.z * q2.z, q1.w * q2.w)
     return (tmp.x + tmp.y) + (tmp.z + tmp.w)
 }
@@ -576,7 +576,7 @@ public func dot(q1: dquat, _ q2: dquat) -> Double {
 /// Spherical linear interpolation of two quaternions.
 /// The interpolation is oriented and the rotation is performed at constant speed.
 /// For short path spherical linear interpolation, use the slerp function.
-public func mix(x: dquat, _ y: dquat, _ a: Double) -> dquat {
+public func mix(_ x: dquat, _ y: dquat, _ a: Double) -> dquat {
     let cosTheta = dot(x, y)
 
     // Perform a linear interpolation when cosTheta is close to 1 to avoid side effect of sin(angle) becoming a zero denominator
@@ -655,22 +655,22 @@ public func eulerAngles(x: dquat) -> double3 {
 }
 
 /// Returns roll value of euler angles expressed in radians.
-public func roll(q: dquat) -> Double {
+public func roll(_ q: dquat) -> Double {
     return Double(atan2(Double(2) * (q.x * q.y + q.w * q.z), q.w * q.w + q.x * q.x - q.y * q.y - q.z * q.z))
 }
 
 /// Returns pitch value of euler angles expressed in radians.
-public func pitch(q: dquat) -> Double {
+public func pitch(_ q: dquat) -> Double {
     return Double(atan2(Double(2) * (q.y * q.z + q.w * q.x), q.w * q.w - q.x * q.x - q.y * q.y + q.z * q.z))
 }
 
 /// Returns yaw value of euler angles expressed in radians.
-public func yaw(q: dquat) -> Double {
+public func yaw(_ q: dquat) -> Double {
     return asin(Double(-2) * (q.x * q.z - q.w * q.y))
 }
 
 /// Converts a quaternion to a 3 * 3 matrix.
-public func double3x3_cast(q: dquat) -> double3x3 {
+public func double3x3_cast(_ q: dquat) -> double3x3 {
     var Result = double3x3(1)
     let qxx = q.x * q.x
     let qyy = q.y * q.y
@@ -702,7 +702,7 @@ public func double4x4_cast(q: dquat) -> double4x4 {
 }
 
 /// Converts a 3 * 3 matrix to a quaternion.
-public func dquat_cast(m: double3x3) -> dquat {
+public func dquat_cast(_ m: double3x3) -> dquat {
     let fourXSquaredMinus1 = m[0][0] - m[1][1] - m[2][2]
     let fourYSquaredMinus1 = m[1][1] - m[0][0] - m[2][2]
     let fourZSquaredMinus1 = m[2][2] - m[0][0] - m[1][1]
@@ -757,7 +757,7 @@ public func dquat_cast(m: double3x3) -> dquat {
 }
 
 /// Converts a 4 * 4 matrix to a quaternion.
-public func dquat_cast(m: double4x4) -> dquat {
+public func dquat_cast(_ m: double4x4) -> dquat {
     return dquat_cast(double3x3(m))
 }
 

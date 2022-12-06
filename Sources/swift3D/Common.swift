@@ -14,14 +14,14 @@ import simd
 /// Clamp `x` to the range [`min`, max]. If lane of `x` is
 /// NaN, the result is `min`.
 
-public func clamp(value: Float, lower: Float, upper: Float) -> Float {
+public func clamp(_ value: Float, lower: Float, upper: Float) -> Float {
     return min(max(value, lower), upper)
 }
 
 /// Clamp `x` to the range [`min`, max]. If lane of `x` is
 /// NaN, the result is `min`.
 
-public func clamp(value: Double, lower: Double, upper: Double) -> Double {
+public func clamp(_ value: Double, lower: Double, upper: Double) -> Double {
     return min(max(value, lower), upper)
 }
 
@@ -31,7 +31,7 @@ public func clamp(value: Double, lower: Double, upper: Double) -> Double {
 /// the result would be 1.0 when `x` is a very small negative number, which may
 /// result in out-of-bounds table accesses in common usage.
 
-public func fract(x: Float) -> Float {
+public func fract(_ x: Float) -> Float {
     return clamp(x - floor(x), lower: 0.0, upper: 1.0)
 }
 
@@ -39,7 +39,7 @@ public func fract(x: Float) -> Float {
 /// the result would be 1.0 when `x` is a very small negative number, which may
 /// result in out-of-bounds table accesses in common usage.
 
-public func fract(x: Double) -> Double {
+public func fract(_ x: Double) -> Double {
     return clamp(x - floor(x), lower: 0.0, upper: 1.0)
 }
 
@@ -87,7 +87,7 @@ public func round(x: double4) -> double4 {
 /// A fractional part of 0.5 will round toward the nearest even
 /// integer. (Both 3.5 and 4.5 for x will return 4.0.)
 
-public func roundEven(x: Float) -> Float {
+public func roundEven(_ x: Float) -> Float {
     let fractionalPart = fract(x)
     let integer = Int(x)
     let integerPart = Float(integer)
@@ -107,7 +107,7 @@ public func roundEven(x: Float) -> Float {
 /// A fractional part of 0.5 will round toward the nearest even
 /// integer. (Both 3.5 and 4.5 for x will return 4.0.)
 
-public func roundEven(x: float2) -> float2 {
+public func roundEven(_ x: float2) -> float2 {
     return float2(roundEven(x[0]), roundEven(x[1]))
 }
 
@@ -115,7 +115,7 @@ public func roundEven(x: float2) -> float2 {
 /// A fractional part of 0.5 will round toward the nearest even
 /// integer. (Both 3.5 and 4.5 for x will return 4.0.)
 
-public func roundEven(x: float3) -> float3 {
+public func roundEven(_ x: float3) -> float3 {
     return float3(roundEven(x[0]), roundEven(x[1]), roundEven(x[2]))
 }
 
@@ -123,7 +123,7 @@ public func roundEven(x: float3) -> float3 {
 /// A fractional part of 0.5 will round toward the nearest even
 /// integer. (Both 3.5 and 4.5 for x will return 4.0.)
 
-public func roundEven(x: float4) -> float4 {
+public func roundEven(_ x: float4) -> float4 {
     return float4(roundEven(x[0]), roundEven(x[1]), roundEven(x[2]), roundEven(x[3]))
 }
 
@@ -131,7 +131,7 @@ public func roundEven(x: float4) -> float4 {
 /// A fractional part of 0.5 will round toward the nearest even
 /// integer. (Both 3.5 and 4.5 for x will return 4.0.)
 
-public func roundEven(x: Double) -> Double {
+public func roundEven(_ x: Double) -> Double {
     let fractionalPart = fract(x)
     let integer = Int(x)
     let integerPart = Double(integer)
@@ -151,7 +151,7 @@ public func roundEven(x: Double) -> Double {
 /// A fractional part of 0.5 will round toward the nearest even
 /// integer. (Both 3.5 and 4.5 for x will return 4.0.)
 
-public func roundEven(x: double2) -> double2 {
+public func roundEven(_ x: double2) -> double2 {
     return double2(roundEven(x[0]), roundEven(x[1]))
 }
 
@@ -159,7 +159,7 @@ public func roundEven(x: double2) -> double2 {
 /// A fractional part of 0.5 will round toward the nearest even
 /// integer. (Both 3.5 and 4.5 for x will return 4.0.)
 
-public func roundEven(x: double3) -> double3 {
+public func roundEven(_ x: double3) -> double3 {
     return double3(roundEven(x[0]), roundEven(x[1]), roundEven(x[2]))
 }
 
@@ -167,7 +167,7 @@ public func roundEven(x: double3) -> double3 {
 /// A fractional part of 0.5 will round toward the nearest even
 /// integer. (Both 3.5 and 4.5 for x will return 4.0.)
 
-public func roundEven(x: double4) -> double4 {
+public func roundEven(_ x: double4) -> double4 {
     return double4(roundEven(x[0]), roundEven(x[1]), roundEven(x[2]), roundEven(x[3]))
 }
 
@@ -176,97 +176,97 @@ public func roundEven(x: double4) -> double4 {
 /// Modulus. Returns x - y * floor(x / y)
 /// for each component in x using the floating point value y.
 
-public func mod(x: Float, _ y: Float) -> Float {
+public func mod(_ x: Float, _ y: Float) -> Float {
     return x - y * floor(x / y)
 }
 
 /// Modulus. Returns x - y * floor(x / y)
 /// for each component in x using the floating point value y.
 
-public func mod(x: float2, _ y: Float) -> float2 {
+public func mod(_ x: float2, _ y: Float) -> float2 {
     return float2(mod(x[0], y), mod(x[1], y))
 }
 
 /// Modulus. Returns x - y * floor(x / y)
 /// for each component in x using the floating point value y.
 
-public func mod(x: float3, _ y: Float) -> float3 {
+public func mod(_ x: float3, _ y: Float) -> float3 {
     return float3(mod(x[0], y), mod(x[1], y), mod(x[2], y))
 }
 
 /// Modulus. Returns x - y * floor(x / y)
 /// for each component in x using the floating point value y.
 
-public func mod(x: float4, _ y: Float) -> float4 {
+public func mod(_ x: float4, _ y: Float) -> float4 {
     return float4(mod(x[0], y), mod(x[1], y), mod(x[2], y), mod(x[3], y))
 }
 
 /// Modulus. Returns x - y * floor(x / y)
 /// for each component in x using the floating point value y.
 
-public func mod(x: float2, _ y: float2) -> float2 {
+public func mod(_ x: float2, _ y: float2) -> float2 {
     return float2(mod(x[0], y[0]), mod(x[1], y[1]))
 }
 
 /// Modulus. Returns x - y * floor(x / y)
 /// for each component in x using the floating point value y.
 
-public func mod(x: float3, _ y: float3) -> float3 {
+public func mod(_ x: float3, _ y: float3) -> float3 {
     return float3(mod(x[0], y[0]), mod(x[1], y[1]), mod(x[2], y[2]))
 }
 
 /// Modulus. Returns x - y * floor(x / y)
 /// for each component in x using the floating point value y.
 
-public func mod(x: float4, _ y: float4) -> float4 {
+public func mod(_ x: float4, _ y: float4) -> float4 {
     return float4(mod(x[0], y[0]), mod(x[1], y[1]), mod(x[2], y[2]), mod(x[3], y[3]))
 }
 
 /// Modulus. Returns x - y * floor(x / y)
 /// for each component in x using the floating point value y.
 
-public func mod(x: Double, _ y: Double) -> Double {
+public func mod(_ x: Double, _ y: Double) -> Double {
     return x - y * floor(x / y)
 }
 
 /// Modulus. Returns x - y * floor(x / y)
 /// for each component in x using the floating point value y.
 
-public func mod(x: double2, _ y: Double) -> double2 {
+public func mod(_ x: double2, _ y: Double) -> double2 {
     return double2(mod(x[0], y), mod(x[1], y))
 }
 
 /// Modulus. Returns x - y * floor(x / y)
 /// for each component in x using the floating point value y.
 
-public func mod(x: double3, _ y: Double) -> double3 {
+public func mod(_ x: double3, _ y: Double) -> double3 {
     return double3(mod(x[0], y), mod(x[1], y), mod(x[2], y))
 }
 
 /// Modulus. Returns x - y * floor(x / y)
 /// for each component in x using the floating point value y.
 
-public func mod(x: double4, _ y: Double) -> double4 {
+public func mod(_ x: double4, _ y: Double) -> double4 {
     return double4(mod(x[0], y), mod(x[1], y), mod(x[2], y), mod(x[3], y))
 }
 
 /// Modulus. Returns x - y * floor(x / y)
 /// for each component in x using the floating point value y.
 
-public func mod(x: double2, _ y: double2) -> double2 {
+public func mod(_ x: double2, _ y: double2) -> double2 {
     return double2(mod(x[0], y[0]), mod(x[1], y[1]))
 }
 
 /// Modulus. Returns x - y * floor(x / y)
 /// for each component in x using the floating point value y.
-public func mod(x: double3, _ y: double3) -> double3 {
+public func mod(_ x: double3, _ y: double3) -> double3 {
     return double3(mod(x[0], y[0]), mod(x[1], y[1]), mod(x[2], y[2]))
 }
 
 /// Modulus. Returns x - y * floor(x / y)
 /// for each component in x using the floating point value y.
 
-public func mod(x: double4, _ y: double4) -> double4 {
+public func mod(_ x: double4, _ y: double4) -> double4 {
     return double4(mod(x[0], y[0]), mod(x[1], y[1]), mod(x[2], y[2]), mod(x[3], y[3]))
 }
 
@@ -326,7 +326,7 @@ public func modf(x: double4) -> (double4, double4) {
 /// x and y using the floating-point value a.
 /// The value for t is not restricted to the range [0, 1].
 
-public func mix(x: Float, _ y: Float, _ t: Float) -> Float {
+public func mix(_ x: Float, _ y: Float, _ t: Float) -> Float {
     return x + t * (y - x)
 }
 
@@ -334,7 +334,7 @@ public func mix(x: Float, _ y: Float, _ t: Float) -> Float {
 /// x and y using the floating-point value a.
 /// The value for t is not restricted to the range [0, 1].
 
-public func mix(x: Double, _ y: Double, _ t: Double) -> Double {
+public func mix(_ x: Double, _ y: Double, _ t: Double) -> Double {
     return x + t * (y - x)
 }
 

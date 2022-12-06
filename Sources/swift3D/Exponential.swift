@@ -221,37 +221,37 @@ public func log2(x: double4) -> double4 {
 
 /// Returns the positive square root of v.
 
-public func sqrt(v: float2) -> float2 {
+public func sqrt(_ v: float2) -> float2 {
     return float2(sqrt(v[0]), sqrt(v[1]))
 }
 
 /// Returns the positive square root of v.
 
-public func sqrt(v: float3) -> float3 {
+public func sqrt(_ v: float3) -> float3 {
     return float3(sqrt(v[0]), sqrt(v[1]), sqrt(v[2]))
 }
 
 /// Returns the positive square root of v.
 
-public func sqrt(v: float4) -> float4 {
+public func sqrt(_ v: float4) -> float4 {
     return float4(sqrt(v[0]), sqrt(v[1]), sqrt(v[2]), sqrt(v[3]))
 }
 
 /// Returns the positive square root of v.
 
-public func sqrt(v: double2) -> double2 {
+public func sqrt(_ v: double2) -> double2 {
     return double2(sqrt(v[0]), sqrt(v[1]))
 }
 
 /// Returns the positive square root of v.
 
-public func sqrt(v: double3) -> double3 {
+public func sqrt(_ v: double3) -> double3 {
     return double3(sqrt(v[0]), sqrt(v[1]), sqrt(v[2]))
 }
 
 /// Returns the positive square root of v.
 
-public func sqrt(v: double4) -> double4 {
+public func sqrt(_ v: double4) -> double4 {
     return double4(sqrt(v[0]), sqrt(v[1]), sqrt(v[2]), sqrt(v[3]))
 }
 
@@ -259,36 +259,36 @@ public func sqrt(v: double4) -> double4 {
 
 /// Returns the reciprocal of the positive square root of v.
 
-public func inversesqrt(v: float2) -> float2 {
+public func inversesqrt(_ v: float2) -> float2 {
     return float2(1) / sqrt(v)
 }
 
 /// Returns the reciprocal of the positive square root of v.
 
-public func inversesqrt(v: float3) -> float3 {
+public func inversesqrt(_ v: float3) -> float3 {
     return float3(1) / sqrt(v)
 }
 
 /// Returns the reciprocal of the positive square root of v.
 
-public func inversesqrt(v: float4) -> float4 {
+public func inversesqrt(_ v: float4) -> float4 {
     return float4(1) / sqrt(v)
 }
 
 /// Returns the reciprocal of the positive square root of v.
 
-public func inversesqrt(v: double2) -> double2 {
+public func inversesqrt(_ v: double2) -> double2 {
     return double2(1) / sqrt(v)
 }
 
 /// Returns the reciprocal of the positive square root of v.
 
-public func inversesqrt(v: double3) -> double3 {
+public func inversesqrt(_ v: double3) -> double3 {
     return double3(1) / sqrt(v)
 }
 
 /// Returns the reciprocal of the positive square root of v.
 
-public func inversesqrt(v: double4) -> double4 {
+public func inversesqrt(_ v: double4) -> double4 {
     return double4(1) / sqrt(v)
 }
